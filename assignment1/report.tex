@@ -1,20 +1,21 @@
+\RequirePackage[l2tabu, orthodox, abort]{nag}
 \documentclass[a4paper, 11pt]{article}
 
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{ucs}
 \usepackage[english]{babel}
-\usepackage{mathtools, amsmath, amsfonts}
+\usepackage{mathtools, amsmath, amsfonts, amssymb}
 \usepackage{fancyhdr}
 \usepackage[parfill]{parskip}
 \usepackage{graphicx}
-\usepackage{palatino}
-\usepackage{newtxmath}
+\usepackage[sc]{mathpazo}
 \usepackage[scaled]{beramono}
-\usepackage{float}
+\usepackage[scaled]{helvet}
+%\usepackage{float}
 \usepackage[font={small,it}]{caption}
 \usepackage{fixltx2e}
-\usepackage[scaled]{helvet}
+\usepackage[colorinlistoftodos]{todonotes}
 % \usepackage{fullpage}
 
 \linespread{1.05}
@@ -33,6 +34,11 @@
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
 \newcommand{\vect}[1]{\textbf{#1}}
 \newcommand{\mat}[1]{\textbf{#1}}
+
+% Todonotes commands.
+\newcommand{\addref}{\todo[color=red!40]{Add reference.}}
+\newcommand{\rewrite}[1]{\todo[color=green!40]{#1}}
+\newcommand{\missing}[1]{\todo[inline,color=green!40]{Need to write: #1}}
 
 \title{ 
 \normalfont \normalsize 
@@ -149,13 +155,13 @@ We expand the expression and then use the sum rule
 
 \paragraph{Question 2}
 Using the reciprocal rule we get that (this is equivalent to using the chain rule, as it can be derived as a special case of the chain rule)
-\[
+\begin{align*}
     {\partial \over \partial w} f(w)
-    = {\partial \over \partial w} {1 \over (wx+b)^2}
-    = {-(2x^2 w + 2xb) \over ((wx+b)^2)^2}
-    = {-2x (wx + b) \over (wx+b)^4}
+    &= {\partial \over \partial w} {1 \over (wx+b)^2}
+    = {-(2x^2 w + 2xb) \over ((wx+b)^2)^2} \\
+    &= {-2x (wx + b) \over (wx+b)^4}
     = - {2x \over (wx + b)^3}
-\]
+\end{align*}
 
 \paragraph{Question 3}
 Using the product rule with $g_1(x) = x$ and $g_2(x) = e^x$ we get
@@ -166,15 +172,50 @@ Using the product rule with $g_1(x) = x$ and $g_2(x) = e^x$ we get
     = (x + 1) e^x
 \]
 
-
 \section{Probability and Parameter Estimation}
 \label{sec:probability_and_parameter_estimation}
+The source code can be found in Appendix \ref{sec:source_code}.
+
+\subsection{Univariate Gaussian distributions}
+\label{sub:univariate_gaussian_distributions}
+
+\missing{A little overall about the source code.}
+\missingfigure{plot for each of the distributions.}
+
+\subsection{Sampling from a multivariate Gaussian distribution}
+\label{sub:sampling_from_a_multivariate_gaussian_distributions}
+
+\missing{A little overall about the source code.}
+\missingfigure{plot for the data set.}
+
+\subsection{Means}
+\label{sub:means}
+
+\missing{A little overall about the source code.}
+\missingfigure{plot of the data with means.}
+
+\missing{quantitative evaluation of deviation and explanation of what the quantity means; consise discussion of the reason for the deviation}
+
+\subsection{Covariance: The geometry of multivariate Gaussian distributions}
+\label{sub:covariance__the_geometry_of_multivariate_gaussian_distributions}
 
 \section{The Gaussian distribution and its conditional distributions} 
 \label{sec:the_gaussian_distribution_and_its_conditional_distributions}
 
-
 \section{Classification}
 \label{sec:classification}
+
+\subsection{Nearest neighbour}
+\label{sub:nearest_neighbour}
+
+\subsection{Hyperparameter selection using cross-validation}
+\label{sub:hyperparameter_selection_using_cross_validation}
+
+\subsection{Data normalization}
+\label{sub:data_normalization}
+
+\appendix
+\section{Source code}
+\label{sec:source_code}
 
 \end{document}

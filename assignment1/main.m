@@ -1,6 +1,8 @@
 graphics_toolkit('gnuplot');
 
-% I.2.1
+%%
+% FUNCTIONS
+%
 function y = gauss(x,m,s)
     y = 1 / sqrt(2 * pi * s^2) * exp(- 1/(2*s^2) * (x - m)^2);
 end
@@ -17,9 +19,25 @@ function h = proper_plot(X, Y)
     set(h,'PaperPosition',[0,0,W,H]);
     FS = findall(h,'-property','FontWeight');
     set(FS,'FontWeight','bold');
-    % pause
 end
 
+function Y = sample_gauss(R, u, CovMat)
+    L = chol(CovMat, 'lower');
+    Y = zeros(size(R, 1),2);
+    for k=1:size(R, 1)
+        Y(k,:) = u + L * R(k,:)';
+    end
+end
+
+function result = rotate_matrix(mat, degree)
+    rad = degree * pi/180;
+    rmat = [cos(rad) -sin(rad); sin(rad) cos(rad)];
+    result = inv(rmat) * mat * rmat;
+end
+
+%%
+% I.2.1
+%
 X = [-5:0.01:3];
 h = proper_plot(X, arrayfun(@(x) gauss(x,-1,1), X));
 print(h,'-dpng','-color','I21_1.png');
@@ -32,19 +50,13 @@ X = [-10:0.01:14];
 h = proper_plot(X, arrayfun(@(x) gauss(x,2,3), X));
 print(h,'-dpng','-color','I21_3.png');
 
+%%
 % I.2.2
+%
 n = 100;
 u = [1 2]';
 CovMat = [0.3 0.2; 0.2 0.2];
 R = randn(n,2);
-
-function Y = sample_gauss(R, u, CovMat)
-    L = chol(CovMat, 'lower');
-    Y = zeros(size(R, 1),2);
-    for k=1:size(R, 1)
-        Y(k,:) = u + L * R(k,:)';
-    end
-end
 
 Y = sample_gauss(R, u, CovMat);
 h = figure(1);
@@ -52,7 +64,9 @@ plot(Y(:,1), Y(:,2), 'ok', 'MarkerSize', 10, 'MarkerFaceColor','r');
 grid on;
 print(h,'-dpng','-color','I22_1.png');
 
+%%
 % I.2.3
+%
 hold on;
 su = mean(Y);
 plot(u(1), u(2), 'ok', 'MarkerSize', 10, 'MarkerFaceColor','b');
@@ -63,7 +77,9 @@ hold off;
 
 distanceMean = abs(u - su')
 
+%%
 % I.2.4
+%
 SCovMat = zeros(2, 2);
 for k=1:n
     t = Y(k,:)' - su';
@@ -78,12 +94,6 @@ EigenMat(:,2) = u + sqrt(eigenValues(2,2)) * EigenMat(:,2)
 
 plot(EigenMat(1,:), EigenMat(2,:), 'ok', 'MarkerSize', 10, 'MarkerFaceColor','r');
 grid on;
-
-function result = rotate_matrix(mat, degree)
-    rad = degree * pi/180;
-    rmat = [cos(rad) -sin(rad); sin(rad) cos(rad)];
-    result = inv(rmat) * mat * rmat;
-end
 
 CovMat30 = rotate_matrix(SCovMat, 30);
 Y = sample_gauss(R, u, CovMat30);
