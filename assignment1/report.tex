@@ -1,0 +1,180 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ucs}
+\usepackage[english]{babel}
+\usepackage{mathtools, amsmath, amsfonts}
+\usepackage{fancyhdr}
+\usepackage[parfill]{parskip}
+\usepackage{graphicx}
+\usepackage{palatino}
+\usepackage{newtxmath}
+\usepackage[scaled]{beramono}
+\usepackage{float}
+\usepackage[font={small,it}]{caption}
+\usepackage{fixltx2e}
+\usepackage[scaled]{helvet}
+% \usepackage{fullpage}
+
+\linespread{1.05}
+\pagestyle{fancyplain}
+\fancyhead{}
+\fancyfoot[L]{}
+\fancyfoot[C]{}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{13.6pt}
+
+\widowpenalty=1000
+\clubpenalty=1000
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
+\newcommand{\vect}[1]{\textbf{#1}}
+\newcommand{\mat}[1]{\textbf{#1}}
+
+\title{ 
+\normalfont \normalsize 
+\textsc{University of Copenhagen} \\ [25pt]
+\horrule{0.5pt} \\[0.4cm]
+\huge StatML: Assigment 1\\
+\horrule{2pt} \\[0.5cm]
+}
+
+\author{Jens Fredskov (chw752)\\Henrik Bendt (gwk553)}
+
+\begin{document}
+\maketitle
+
+\pagebreak
+\section{Math Checklist}
+\label{sec:math_checklist}
+
+\subsection{Vectors and Matrices}
+\label{sub:vectors_and_matrices}
+
+\paragraph{Question 1}
+We calculate the inner product as
+\[
+    \vect a \cdot \vect b = \begin{pmatrix} 1 & 2 & 2 \end{pmatrix}
+                \begin{pmatrix} 3 \\ 2 \\ 1 \end{pmatrix}
+              = 1 \cdot 3 + 2 \cdot 2 + 2 \cdot 1
+              = 9
+\]
+
+\paragraph{Question 2}
+The norm corresponds to the square root of the inner product of a vector with itself, thus we calculate it as
+\[
+    ||\vect a|| = \sqrt{\vect a \cdot \vect a} = \sqrt{1^2 + 2^2 + 2^2} = 3
+\]
+
+\paragraph{Question 3}
+The outer product of the two vectors $a$ and $b$:
+\[
+    \vect a \vect b^T =  \begin{pmatrix} 1 \\ 2 \\ 2 \end{pmatrix}
+            \begin{pmatrix} 3 & 2 & 1 \end{pmatrix}
+         =  \begin{pmatrix} 
+                3 & 2 & 1\\
+                6 & 4 & 2\\
+                6 & 4 & 2
+            \end{pmatrix}
+\]
+
+\paragraph{Question 4}
+Because the matrix is a diagonal matrix we can simply take the reciprocal of every diagonal element and thus we get
+\[
+    \mat M^{-1} = 
+    \begin{pmatrix}
+        1 & 0 & 0 \\
+        0 & \frac{1}{4} & 0 \\
+        0 & 0 & \frac{1}{2}
+    \end{pmatrix}
+\]
+
+\paragraph{Question 5}
+We calculate the matrix-vector product as
+\[
+    \mat M \vect a =
+    \begin{pmatrix}
+        1 & 0 & 0 \\
+        0 & 4 & 0 \\
+        0 & 0 & 2
+    \end{pmatrix}
+    \begin{pmatrix}
+        1 \\ 2 \\ 2
+    \end{pmatrix} =
+    \begin{pmatrix}
+        1 \cdot 1 & 0 & 0 \\
+        0 & 4 \cdot 2 & 0 \\
+        0 & 0 & 2 \cdot 2
+    \end{pmatrix} = 
+    \begin{pmatrix}
+        1 & 0 & 0 \\
+        0 & 8 & 0 \\
+        0 & 0 & 4
+    \end{pmatrix}
+\]
+
+
+\paragraph{Question 6}
+We have that $\mat A = 
+                \begin{pmatrix} 
+                    3 & 2 & 1\\
+                    6 & 4 & 2\\
+                    6 & 4 & 2
+                \end{pmatrix}$, so the transposed is
+\[
+    \mat A^T = \begin{pmatrix} 
+                    3 & 6 & 6\\
+                    2 & 4 & 4\\
+                    1 & 2 & 2
+                \end{pmatrix}
+\]
+
+\paragraph{Question 7}
+The rank of $\mat A$ is 1. This is because $\mat A$ is the result of an outer product, so every $i$th column is $\vect a$ scaled with a factor of $\vect b_i$.
+
+\paragraph{Question 8}
+We cannot invert $\mat A$ because the rank is only 1, and to invert a matrix, the rank must be equal to $n=m$ where $n$ are the number of columns and $m$ the number of rows. As the matrix $\mat A$ is $3x3$ and rank is 1, this is not the case.
+
+\subsection{Derivatives}
+\label{sub:derivatives}
+
+\paragraph{Question 1}
+We expand the expression and then use the sum rule
+\[
+    \frac{\partial}{\partial w}f(w) = \frac{\partial}{\partial w} (wx+b)^2 = \frac{\partial}{\partial w} \left(x^2w^2+2xbw+b^2 \right) = 2x^2w+2xb
+\]
+
+\paragraph{Question 2}
+Using the reciprocal rule we get that (this is equivalent to using the chain rule, as it can be derived as a special case of the chain rule)
+\[
+    {\partial \over \partial w} f(w)
+    = {\partial \over \partial w} {1 \over (wx+b)^2}
+    = {-(2x^2 w + 2xb) \over ((wx+b)^2)^2}
+    = {-2x (wx + b) \over (wx+b)^4}
+    = - {2x \over (wx + b)^3}
+\]
+
+\paragraph{Question 3}
+Using the product rule with $g_1(x) = x$ and $g_2(x) = e^x$ we get
+\[
+    {\partial \over \partial x} f(x)
+    = {\partial \over \partial x} x e^x
+    = x \cdot e^x + 1 \cdot e^x
+    = (x + 1) e^x
+\]
+
+
+\section{Probability and Parameter Estimation}
+\label{sec:probability_and_parameter_estimation}
+
+\section{The Gaussian distribution and its conditional distributions} 
+\label{sec:the_gaussian_distribution_and_its_conditional_distributions}
+
+
+\section{Classification}
+\label{sec:classification}
+
+\end{document}
