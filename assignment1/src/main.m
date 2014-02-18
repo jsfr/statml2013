@@ -1,10 +1,10 @@
-h = figure(1);
-
-% graphics_toolkit('gnuplot');
-
 %%
 % I.2.1
 %
+clear;
+h = figure(1);
+
+fprintf('############### I.2.1 ###############\n');
 X = [-10:0.01:14];
 Y1 = arrayfun(@(x) gauss(x,-1,1), X);
 Y2 = arrayfun(@(x) gauss(x,0,2), X);
@@ -17,38 +17,41 @@ plot(X, Y3, 'b-', 'LineWidth', 1.5);
 hold off;
 axis ([X(1), X(end), 0, max([Y1 Y2 Y3])]);
 legend('[-1, 1]', '[0, 2]', '[2, 3]');
-grid on;
-print(h,'-dpng','I21.png');
+betterPlots(h);
+print(h,'-dpng','../figures/I21.png');
 
 %%
 % I.2.2
 %
+fprintf('############### I.2.2 ###############\n');
 n = 100;
 mu = [1 2]';
 Sigma = [0.3 0.2; 0.2 0.2];
 R = randn(n,2);
 Y1 = resampleGauss(R, mu, Sigma);
 
-plot(Y1(:,1), Y1(:,2), 'ok', 'MarkerSize', 3, 'MarkerFaceColor','r');
-grid on;
-print(h,'-dpng','I22.png');
+plot(Y1(:,1), Y1(:,2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','r');
+betterPlots(h);
+print(h,'-dpng','../figures/I22.png');
 
 %%
 % I.2.3
 %
+fprintf('############### I.2.3 ###############\n');
 muML = mean(Y1)'
 muDist = abs(mu - muML)
 
-hold on; % Plot with the result from I22
-plot(mu(1), mu(2), 'ok', 'MarkerSize', 3, 'MarkerFaceColor','b');
-plot(muML(1), muML(2), 'ok', 'MarkerSize', 3, 'MarkerFaceColor','g');
+hold on;
+plot(mu(1), mu(2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','b');
+plot(muML(1), muML(2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','g');
 hold off;
-grid on;
-print(h,'-dpng','I23.png');
+betterPlots(h);
+print(h,'-dpng','../figures/I23.png');
 
 %%
 % I.2.4
 %
+fprintf('############### I.2.4 ###############\n');
 SigmaML = zeros(2, 2);
 for k=1:n
     t = Y1(k,:)' - muML;
@@ -61,12 +64,12 @@ SigmaML = SigmaML / n
 e1 = mu + sqrt(eigenValues(1,1)) * EigenVectors(:,1)
 e2 = mu + sqrt(eigenValues(2,2)) * EigenVectors(:,2)
 
-plot(Y1(:,1), Y1(:,2), 'ok', 'MarkerSize', 3, 'MarkerFaceColor','r');
+plot(Y1(:,1), Y1(:,2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','r');
 hold on;
 plot([muML(1) e1(1)], [muML(2) e1(2)], 'b-', 'LineWidth', 1.5);
 plot([muML(1) e2(1)], [muML(2) e2(2)], 'b-', 'LineWidth', 1.5);
-grid on;
-print(h,'-dpng','I24_1.png');
+betterPlots(h);
+print(h,'-dpng','../figures/I24_1.png');
 hold off;
 
 Sigma30 = rotateMatrix(SigmaML, 30);
@@ -77,44 +80,72 @@ Y2 = resampleGauss(R, mu, Sigma30);
 Y3 = resampleGauss(R, mu, Sigma60);
 Y4 = resampleGauss(R, mu, Sigma90);
 
-plot(Y2(:,1), Y2(:,2), 'ok', 'MarkerSize', 3, 'MarkerFaceColor','r');
+plot(Y2(:,1), Y2(:,2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','r');
 hold on;
-plot(Y3(:,1), Y3(:,2), 'ok', 'MarkerSize', 3, 'MarkerFaceColor','g');
-plot(Y4(:,1), Y4(:,2), 'ok', 'MarkerSize', 3, 'MarkerFaceColor','b');
-legend('30 deg', '60 deg', '90deg');
-grid on;
-print(h,'-dpng','I24_2.png');
+plot(Y3(:,1), Y3(:,2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','g');
+plot(Y4(:,1), Y4(:,2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','b');
+legend('30 deg', '60 deg', '90 deg');
+betterPlots(h);
+print(h,'-dpng','../figures/I24_2.png');
 hold off;
 
+zeroAngle = -atand(EigenVectors(1,1)/EigenVectors(2,1))
+zeroRotatedY = resampleGauss(R, mu, rotateMatrix(SigmaML, zeroAngle))
 
-t = polyfit(Y1(:, 1), Y1(:, 2), 1)
-dataAngle = acos(dot([1 t(1)]', [1 0]')/(norm([1 t(1)]')*norm([1 0]'))) * 180/pi
-flippedEigen = fliplr(flipud(eigenValues));
-Y5 = resampleGauss(R, mu, flippedEigen);
-Y6 = resampleGauss(R, mu, rotateMatrix(SigmaML, dataAngle));
-t2 = polyfit(Y5(:, 1), Y5(:, 2), 1)
-t3 = polyfit(Y6(:, 1), Y6(:, 2), 1)
-
-plot(Y1(:,1), Y1(:,2), 'ok', 'MarkerSize', 3, 'MarkerFaceColor','r');
+plot(Y1(:,1), Y1(:,2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','r');
 hold on;
-plot(Y5(:,1), Y5(:,2), 'ok', 'MarkerSize', 3, 'MarkerFaceColor','b');
-plot(Y6(:,1), Y6(:,2), 'ok', 'MarkerSize', 3, 'MarkerFaceColor','g');
-plot([-1:3], arrayfun(@(x) t(1)*x+t(2), [-1:3]), 'r-', 'LineWidth', 1.5);
-plot([-1:3], arrayfun(@(x) t2(1)*x+t2(2), [-1:3]), 'b-', 'LineWidth', 1.5);
-plot([-1:3], arrayfun(@(x) t3(1)*x+t3(2), [-1:3]), 'g-', 'LineWidth', 1.5);
-grid on;
-print(h,'-dpng','I24_3.png');
-
-pause
+plot(zeroRotatedY(:,1), zeroRotatedY(:,2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','b');
+betterPlots(h);
+print(h,'-dpng','../figures/I24_3.png');
 
 %%
 % I.4.1
 %
+clear;
+fprintf('############### I.4.1 ###############\n');
+trainingData = importdata('../IrisTrain2014.dt');
+testData = importdata('../IrisTest2014.dt');
+
+fprintf('Training data:\n');
+for k=1:2:5
+    C = arrayfun(@(x, y) kNN(trainingData, [x y], k), trainingData(:, 1), trainingData(:, 2));
+    acc = 1 - sum(trainingData(:, 3) ~= C)/length(C);
+    fprintf('\tk = %d, accuracy = %1.2f\n', k, acc);
+end
+
+fprintf('\nTest data:\n');
+for k=1:2:5
+   C = arrayfun(@(x, y) kNN(trainingData, [x y], k), testData(:, 1), testData(:, 2));
+   acc = 1 - sum(testData(:, 3) ~= C)/length(C);
+   fprintf('\tk = %d, accuracy = %1.2f\n', k, acc);
+end
 
 %%
 % I.4.2
 %
+fprintf('############### I.4.2 ###############\n');
+[kBest, kError] = crossValidation(trainingData, 5, [1:2:25])
+C = arrayfun(@(x, y) kNN(trainingData, [x y], kBest), testData(:, 1), testData(:, 2));
+tError = sum(testData(:, 3) ~= C)/length(C)
 
 %%
 % I.4.3
 %
+fprintf('############### I.4.3 ###############\n');
+Means = mean(trainingData(:,1:2), 1)
+Vars = var(trainingData(:,1:2), 0, 1)
+Stds = std(trainingData(:,1:2), 0, 1);
+
+normTrainingData = fNorm(trainingData, Means, Stds);
+
+normMeans = mean(normTrainingData(:,1:2), 1)
+normVars = var(normTrainingData(:,1:2), 0, 1)
+
+normTestData = fNorm(testData, Means, Stds);
+
+normTestMeans = mean(normTestData(:,1:2), 1)
+normTestVars = var(normTestData(:,1:2), 0, 1)
+
+[kNormBest, kNormError] = crossValidation(normTrainingData, 5, [1:2:25])
+C = arrayfun(@(x, y) kNN(normTrainingData, [x y], kNormBest), normTestData(:, 1), normTestData(:, 2));
+tNormError = sum(normTestData(:, 3) ~= C)/length(C)
