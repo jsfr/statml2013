@@ -3,6 +3,7 @@
 %
 clear;
 h = figure(1);
+randomSeed = rng(43786953);
 
 fprintf('############### I.2.1 ###############\n');
 X = [-10:0.01:14];
@@ -31,6 +32,8 @@ R = randn(n,2);
 Y1 = resampleGauss(R, mu, Sigma);
 
 plot(Y1(:,1), Y1(:,2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','r');
+xlabel('x');
+ylabel('y');
 betterPlots(h);
 print(h,'-dpng','../figures/I22.png');
 
@@ -90,7 +93,7 @@ print(h,'-dpng','../figures/I24_2.png');
 hold off;
 
 zeroAngle = -atand(EigenVectors(1,1)/EigenVectors(2,1))
-zeroRotatedY = resampleGauss(R, mu, rotateMatrix(SigmaML, zeroAngle))
+zeroRotatedY = resampleGauss(R, mu, rotateMatrix(SigmaML, zeroAngle));
 
 plot(Y1(:,1), Y1(:,2), 'ok', 'MarkerSize', 6, 'MarkerFaceColor','r');
 hold on;
