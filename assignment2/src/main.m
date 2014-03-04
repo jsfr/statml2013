@@ -110,16 +110,18 @@ rms3ML = rms3;
 trainData = importdata('../data/sunspotsTrainStatML.dt');
 testData = importdata('../data/sunspotsTestStatML.dt');
 
-w1MAP = arrayfun(@(x) maxPosterior([trainData(:,3:4) trainData(:, 6)], x, 1), ...
-                 [0:0.1:200], 'UniformOutput', false);
-w2MAP = arrayfun(@(x) maxPosterior(trainData(:,5:6), x, 1), ...
-                 [-50:0.1:10], 'UniformOutput', false);
-w3MAP = arrayfun(@(x) maxPosterior(trainData, x, 1), ...
-                 [0:0.1:200], 'UniformOutput', false);
-
+h = figure(1);
 y = @(x, wMAP) [1 x] * wMAP;
 rms = @(ts) cell2mat(cellfun(@(t) sqrt(1/size(testData,1)*sum(testData(:,6)-t)^2), ...
                      ts, 'UniformOutput', false));
+
+% Logarithmic scale finding
+w1MAP = arrayfun(@(x) maxPosterior([trainData(:,3:4) trainData(:, 6)], x, 1), ...
+                 10.^[-10:1:10], 'UniformOutput', false);
+w2MAP = arrayfun(@(x) maxPosterior(trainData(:,5:6), x, 1), ...
+                 10.^[-10:1:10], 'UniformOutput', false);
+w3MAP = arrayfun(@(x) maxPosterior(trainData, x, 1), ...
+                 10.^[-10:1:10], 'UniformOutput', false);
 
 t1 = cellfun(@(w) arrayfun(@(x1, x2) y([x1 x2], w), testData(:,3), ...
              testData(:, 4)), w1MAP, 'UniformOutput', false);
@@ -133,11 +135,9 @@ t3 = cellfun(@(w) arrayfun(@(x1, x2, x3, x4, x5) y([x1 x2 x3 x4 x5], w), ...
              testData(:,5)), w3MAP, 'UniformOutput', false);
 rms3 = rms(t3);
 
-figure(h)
-
-plot([0:0.1:200], rms1, 'r-', 'LineWidth', 1.5);
+semilogx(10.^[-10:1:10], rms1, 'r-', 'LineWidth', 1.5);
 hold on;
-plot([0:0.1:200], repmat(rms1ML, 1, size(rms1, 2)), 'b--', 'LineWidth', 1.5);
+semilogx(10.^[-10:1:10], repmat(rms1ML, 1, size(rms1, 2)), 'b--', 'LineWidth', 1.5);
 ylabel('RMS');
 xlabel('Alpha');
 legend('RMS_{MAP}', 'RMS_{ML}');
@@ -145,9 +145,9 @@ betterPlots(h);
 print(h, '-depsc2', '../figures/II22_1.eps');
 hold off;
 
-plot([-50:0.1:10], rms2, 'r-', 'LineWidth', 1.5);
+semilogx(10.^[-10:1:10], rms2, 'r-', 'LineWidth', 1.5);
 hold on;
-plot([-50:0.1:10], repmat(rms2ML, 1, size(rms2, 2)), 'b--', 'LineWidth', 1.5);
+semilogx(10.^[-10:1:10], repmat(rms2ML, 1, size(rms2, 2)), 'b--', 'LineWidth', 1.5);
 ylabel('RMS');
 xlabel('Alpha');
 legend('RMS_{MAP}', 'RMS_{ML}');
@@ -155,12 +155,63 @@ betterPlots(h);
 print(h, '-depsc2', '../figures/II22_2.eps');
 hold off;
 
-plot([0:0.1:200], rms3, 'r-', 'LineWidth', 1.5);
+semilogx(10.^[-10:1:10], rms3, 'r-', 'LineWidth', 1.5);
 hold on;
-plot([-0:0.1:200], repmat(rms3ML, 1, size(rms3, 2)), 'b--', 'LineWidth', 1.5);
+semilogx(10.^[-10:1:10], repmat(rms3ML, 1, size(rms3, 2)), 'b--', 'LineWidth', 1.5);
 ylabel('RMS');
 xlabel('Alpha');
 legend('RMS_{MAP}', 'RMS_{ML}');
 betterPlots(h);
 print(h, '-depsc2', '../figures/II22_3.eps');
+hold off;
+
+
+% Scales have been found now for a minima
+w1MAP = arrayfun(@(x) maxPosterior([trainData(:,3:4) trainData(:, 6)], x, 1), ...
+                 [0:1:2000], 'UniformOutput', false);
+w2MAP = arrayfun(@(x) maxPosterior(trainData(:,5:6), x, 1), ...
+                 [0:1:2000], 'UniformOutput', false);
+w3MAP = arrayfun(@(x) maxPosterior(trainData, x, 1), ...
+                 [0:1:2000], 'UniformOutput', false);
+
+t1 = cellfun(@(w) arrayfun(@(x1, x2) y([x1 x2], w), testData(:,3), ...
+             testData(:, 4)), w1MAP, 'UniformOutput', false);
+rms1 = rms(t1);
+
+t2 = cellfun(@(w) arrayfun(@(x) y(x, w), testData(:,5)), w2MAP, 'UniformOutput', false);
+rms2 = rms(t2);
+
+t3 = cellfun(@(w) arrayfun(@(x1, x2, x3, x4, x5) y([x1 x2 x3 x4 x5], w), ...
+             testData(:,1), testData(:,2), testData(:,3), testData(:,4), ...
+             testData(:,5)), w3MAP, 'UniformOutput', false);
+rms3 = rms(t3);
+
+plot([0:1:2000], rms1, 'r-', 'LineWidth', 1.5);
+hold on;
+plot([0:1:2000], repmat(rms1ML, 1, size(rms1, 2)), 'b--', 'LineWidth', 1.5);
+ylabel('RMS');
+xlabel('Alpha');
+legend('RMS_{MAP}', 'RMS_{ML}');
+betterPlots(h);
+print(h, '-depsc2', '../figures/II22_4.eps');
+hold off;
+
+plot([0:1:2000], rms2, 'r-', 'LineWidth', 1.5);
+hold on;
+plot([0:1:2000], repmat(rms2ML, 1, size(rms2, 2)), 'b--', 'LineWidth', 1.5);
+ylabel('RMS');
+xlabel('Alpha');
+legend('RMS_{MAP}', 'RMS_{ML}');
+betterPlots(h);
+print(h, '-depsc2', '../figures/II22_5.eps');
+hold off;
+
+plot([0:1:2000], rms3, 'r-', 'LineWidth', 1.5);
+hold on;
+plot([0:1:2000], repmat(rms3ML, 1, size(rms3, 2)), 'b--', 'LineWidth', 1.5);
+ylabel('RMS');
+xlabel('Alpha');
+legend('RMS_{MAP}', 'RMS_{ML}');
+betterPlots(h);
+print(h, '-depsc2', '../figures/II22_6.eps');
 hold off;
