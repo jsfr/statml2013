@@ -26,13 +26,14 @@ clear;fprintf('############### II.1.2 ###############\n');
 trainData = importdata('../data/IrisTrain2014.dt');
 testData = importdata('../data/IrisTest2014.dt');
 
-normTrainData = fNorm(trainData);
+Means = mean(trainData(:,1:2), 1);
+Stds = std(trainData(:,1:2), 0, 1);
+
+normTrainData = fNorm(trainData, Means, Stds);
 normMeans = mean(normTrainData(:,1:2), 1)
 normVars = var(normTrainData(:,1:2), 0, 1)
 
-normTestData = fNorm(testData);
-normTestMeans = mean(normTestData(:,1:2), 1)
-normTestVars = var(normTestData(:,1:2), 0, 1)
+normTestData = fNorm(testData, Means, Stds);
 
 getClassFun = lda(normTrainData);
 
@@ -81,9 +82,9 @@ betterPlots(h);
 print(h, '-depsc2', '../figures/II21_1.eps');
 hold off;
 
-rms1 = sqrt(1/size(testData,1)*sum(testData(:,6)-t1)^2)
-rms2 = sqrt(1/size(testData,1)*sum(testData(:,6)-t2)^2)
-rms3 = sqrt(1/size(testData,1)*sum(testData(:,6)-t3)^2)
+rms1 = sqrt(1/size(testData,1)*sum((testData(:,6)-t1).^2))
+rms2 = sqrt(1/size(testData,1)*sum((testData(:,6)-t2).^2))
+rms3 = sqrt(1/size(testData,1)*sum((testData(:,6)-t3).^2))
 
 plot([1916:1:2011], testData(:, 6), 'k-', 'LineWidth', 1.5);
 hold on;
@@ -112,7 +113,7 @@ testData = importdata('../data/sunspotsTestStatML.dt');
 
 h = figure(1);
 y = @(x, wMAP) [1 x] * wMAP;
-rms = @(ts) cell2mat(cellfun(@(t) sqrt(1/size(testData,1)*sum(testData(:,6)-t)^2), ...
+rms = @(ts) cell2mat(cellfun(@(t) sqrt(1/size(testData,1)*sum((testData(:,6)-t).^2)), ...
                      ts, 'UniformOutput', false));
 
 % Logarithmic scale finding
@@ -168,9 +169,9 @@ hold off;
 
 % Scales have been found now for a minima
 w1MAP = arrayfun(@(x) maxPosterior([trainData(:,3:4) trainData(:, 6)], x, 1), ...
-                 [0:1:2000], 'UniformOutput', false);
+                 [0:0.001:1], 'UniformOutput', false);
 w2MAP = arrayfun(@(x) maxPosterior(trainData(:,5:6), x, 1), ...
-                 [0:1:2000], 'UniformOutput', false);
+                 [0:0.001:1], 'UniformOutput', false);
 w3MAP = arrayfun(@(x) maxPosterior(trainData, x, 1), ...
                  [0:1:2000], 'UniformOutput', false);
 
@@ -186,9 +187,9 @@ t3 = cellfun(@(w) arrayfun(@(x1, x2, x3, x4, x5) y([x1 x2 x3 x4 x5], w), ...
              testData(:,5)), w3MAP, 'UniformOutput', false);
 rms3 = rms(t3);
 
-plot([0:1:2000], rms1, 'r-', 'LineWidth', 1.5);
+plot([0:0.001:1], rms1, 'r-', 'LineWidth', 1.5);
 hold on;
-plot([0:1:2000], repmat(rms1ML, 1, size(rms1, 2)), 'b--', 'LineWidth', 1.5);
+plot([0:0.001:1], repmat(rms1ML, 1, size(rms1, 2)), 'b--', 'LineWidth', 1.5);
 ylabel('RMS');
 xlabel('Alpha');
 legend('RMS_{MAP}', 'RMS_{ML}');
@@ -196,9 +197,9 @@ betterPlots(h);
 print(h, '-depsc2', '../figures/II22_4.eps');
 hold off;
 
-plot([0:1:2000], rms2, 'r-', 'LineWidth', 1.5);
+plot([0:0.001:1], rms2, 'r-', 'LineWidth', 1.5);
 hold on;
-plot([0:1:2000], repmat(rms2ML, 1, size(rms2, 2)), 'b--', 'LineWidth', 1.5);
+plot([0:0.001:1], repmat(rms2ML, 1, size(rms2, 2)), 'b--', 'LineWidth', 1.5);
 ylabel('RMS');
 xlabel('Alpha');
 legend('RMS_{MAP}', 'RMS_{ML}');
