@@ -69,9 +69,7 @@ We get a training accuracy of $0.86$ and a test accuracy of $0.79$.
 The implementations of LDA is found in the files \texttt{main.m}, \texttt{lda.m} and \texttt{getClass.m}, the later works as a sub-function for \texttt{lda.m}.
 
 \subsection{LDA and normalisation}
-After normalisation of the data we get a training accuracy of $0.86$ and a test accuracy of $0.82$. The results remain almost unchanged (the test set gets a very slightly improved accuracy).
-
-The reason for this is that the normalization only translate and scale the points, thus the overall structure is kept unchanged (as the normalization is an affine mapping). Thus when the LDA tries to find the separation of the classes, as this is done by a linear line dividing the structure, and as the structure is kept unchanged, this should be almost the same. The positive difference may lie in outliers being brought closer to their respective classes.
+After normalisation of the data we still get a training accuracy of $0.86$ and a test accuracy of $0.79$. The results remain unchanged. This is because the LDA does a linear separation of the data points, which only depends on the structure of the data points and this is not changed when normalising.
 
 The implementation is found in the files \texttt{main.m}, \texttt{fNorm.m} and \texttt{lda.m}.
 
@@ -99,11 +97,11 @@ which is worse than using the Bayes optimal classifier.
 
 When applying each model to the test set with the ML parameter we get the following RMS values
 \begin{align*}
-    RMS_1 = 171.6298\\
-    RMS_2 = 35.8591\\
-    RMS_3 = 42.5108
+    RMS_1 = 35.4651\\
+    RMS_2 = 28.8398\\
+    RMS_3 = 18.7700
 \end{align*}
-showing that model 2 is the optimal solution (for these test data at least), but that model 3 is a good solution also, compared to model 1 which is terrible.
+showing that model 3 is by far the optimal solution (for these test data at least).
 
 \begin{figure}[H]
     \centering
@@ -111,7 +109,7 @@ showing that model 2 is the optimal solution (for these test data at least), but
     \caption{Plot of years vs predicted sunspot numbers for each model on the test set, along with the actual sun spot numbers.}
     \label{fig:II21_2}
 \end{figure}
-From Figure \ref{fig:II21_2} we see that model 3 seem closer to the actual target compared to model 2, which somewhat contradicts the lower RMS error of model 2 compared to model 3 (even though they both have a low error, comparable error).
+From Figure \ref{fig:II21_2} we see that model 3 seem closer to the actual target compared to the other models.
 
 The implementation is found in the files \texttt{main.m} and \texttt{linearRegression.m}.
 
@@ -139,7 +137,7 @@ Note that we could find the optimal value for $\alpha$ by following the iterativ
     \label{fig:II22_3}
 \end{figure}
 
-Based on the above plots, we find the scales of importance for each model, that is, the scales where the line goes under $RMS_{ML}$ and possibly gives a minima. We also see that model 2 does not go below the RMS error of ML, so there is for $\alpha > 0$ no optimal solution for model 2 (it is the ML solution).
+Based on the above plots, we find the scales of importance for each model, that is, the scales where the line goes under $RMS_{ML}$ and possibly gives a minima. We also see that model 1 and 2 does not seem to go below the RMS error of ML, that is, for $\alpha > 0$ no better solution exists for model 1 and 2 than the ML solution.
 
 \begin{figure}[H]
     \centering
@@ -162,11 +160,9 @@ Based on the above plots, we find the scales of importance for each model, that 
     \label{fig:II22_6}
 \end{figure}
 
-We see that for model 1, the $RMS$ error reaches a minima around $\alpha = 500$ and gets an $RMS$ error around $169.25$, which is slightly better than $RMS_{ML} = 171.63$. The $RMS$ error goes below $RMS_{ML}$ around $\alpha = 1$.
+We see that for model 1 and 2, the $RMS$ error do not seem to ever go below $RMS_{ML}$ for any value of $\alpha$.
 
-Model 2 never reaches an $RMS$ error below $RMS_{ML}$ for any value of $\alpha$.
-
-We see that for model 3, the $RMS$ error reaches a minima around $\alpha = 1000$ and gets an $RMS$ error around $15$, which is much better than both $RMS_{ML} = 42.5$ for model 3, and also much better than the optimal $RMS_{ML}$ for any of the computed models of ML. The $RMS$ error goes below $RMS_{ML}$ around $\alpha = 1$.
+We see that for model 3, the $RMS$ error goes below for $0 < \alpha < 10^4$ and we have a minima around $\alpha = 50$ where the $RMS$ error is around $18.62$, which $0.15$ better than the $RMS_{ML} = 18.77$.
 
 The implementation is found in the files \texttt{main.m} and \texttt{maxPosterior.m}.
 
