@@ -1,4 +1,4 @@
-function [InWeights, OutWeights] = steepestDescent(Data, InWeights, OutWeights, h, hdiff, epsilon, step)
+function [InWeights, OutWeights, Errors] = steepestDescent(Data, InWeights, OutWeights, h, hdiff, epsilon, step)
     deltaError = epsilon + 1;
     oldError = meanSquaredError(Data, InWeights, OutWeights, h);
     elderError = oldError + 1;
