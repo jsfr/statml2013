@@ -24,7 +24,11 @@ testData = importdata('../data/sincValidate10.dt');
 h = @(a) a / (1 + abs(a));
 hdiff = @(a) 1 / (1 + abs(a))^2;
 
+StartInWeights = ones(20,2);
+StartOutWeights = ones(21, 1);
+
 [InWeights, OutWeights] = steepestDescent(trainData, [1 1; 1 1], [1 1 1]', h, hdiff, 10E-4, 0.01)
+[InWeights, OutWeights] = steepestDescent(trainData, StartInWeights, StartOutWeights, h, hdiff, 10E-4, 0.01)
 
 trainError = meanSquaredError(trainData, InWeights, OutWeights, h)
 testError = meanSquaredError(testData, InWeights, OutWeights, h)

@@ -11,10 +11,10 @@ function [InWeights, OutWeights] = steepestDescent(Data, InWeights, OutWeights, 
         deltaOutWeights = step*sign(deltaOutWeights);
         InWeights = InWeights - deltaInWeights;
         OutWeights = OutWeights - deltaOutWeights;
-        newError = meanSquaredError(Data, InWeights, OutWeights, h)
+        newError = meanSquaredError(Data, InWeights, OutWeights, h);
         deltaError = abs(newError - oldError);
         errorChange = elderError ~= newError;
-        elderError = oldError
-        oldError = newError
+        elderError = oldError;
+        oldError = newError;
     end
 end
