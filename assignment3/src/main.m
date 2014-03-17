@@ -1,7 +1,7 @@
 %%
 % III.1.1
 %
-clear;fprintf('############### III.2.1 ###############\n');
+clear;fprintf('############### III.1.1 ###############\n');
 
 trainData = importdata('../data/sincTrain25.dt');
 testData = importdata('../data/sincValidate10.dt');
@@ -13,12 +13,21 @@ hdiff = @(a) 1 / (1 + abs(a))^2;
 
 [numDeltaInWeights, numDeltaOutWeights] = numericalDiffs(trainData, h, [1 1; 1 1], [1 1 1]', 10E-8)
 
-
-
 %%
-% III.1.1
+% III.1.2
 %
-clear;fprintf('############### III.2.2 ###############\n');
+clear;fprintf('############### III.1.2 ###############\n');
+
+trainData = importdata('../data/sincTrain25.dt');
+testData = importdata('../data/sincValidate10.dt');
+
+h = @(a) a / (1 + abs(a));
+hdiff = @(a) 1 / (1 + abs(a))^2;
+
+[InWeights, OutWeights] = steepestDescent(trainData, [1 1; 1 1], [1 1 1]', h, hdiff, 10E-4, 0.01)
+
+trainError = meanSquaredError(trainData, InWeights, OutWeights, h)
+testError = meanSquaredError(testData, InWeights, OutWeights, h)
 
 %%
 % III.2.1
