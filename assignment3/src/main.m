@@ -9,7 +9,16 @@ testData = importdata('../data/sincValidate10.dt');
 h = @(a) a / (1 + abs(a));
 hdiff = @(a) 1 / (1 + abs(a))^2;
 
-% testPoint = neuralNetwork(h, [1], [1 1; 1 1], [1 1 1]); % This was just to check that the code worked :D
+[deltaInWeights, deltaOutWeights] = backPropagation(trainData, h, hdiff, [1 1; 1 1], [1 1 1]')
+
+[numDeltaInWeights, numDeltaOutWeights] = numericalDiffs(trainData, h, [1 1; 1 1], [1 1 1]', 10E-8)
+
+
+
+%%
+% III.1.1
+%
+clear;fprintf('############### III.2.2 ###############\n');
 
 %%
 % III.2.1

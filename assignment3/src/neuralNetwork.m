@@ -9,5 +9,5 @@ function y = neuralNetwork(h, x, InWeights, OutWeights)
     x = [1 x]; % Adding the dummy point for the bias w0
     a = arrayfun(@(k) sum(InWeights(k,:).*x), [1:noOfNodes]);
     z = arrayfun(@(ai) h(ai), a);
-    y = sum([1 z] .* OutWeights);
+    y = sum([1 z] .* OutWeights');
 end
