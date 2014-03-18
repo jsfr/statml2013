@@ -1,115 +1,115 @@
 %%
 % III.1.1
 %
-% clear;fprintf('############### III.1.1 ###############\n');
+clear;fprintf('############### III.1.1 ###############\n');
 
-% trainData = importdata('../data/sincTrain25.dt');
-% testData = importdata('../data/sincValidate10.dt');
+trainData = importdata('../data/sincTrain25.dt');
+testData = importdata('../data/sincValidate10.dt');
 
-% h = @(a) a / (1 + abs(a));
-% hdiff = @(a) 1 / (1 + abs(a))^2;
+h = @(a) a / (1 + abs(a));
+hdiff = @(a) 1 / (1 + abs(a))^2;
 
-% [deltaInWeights, deltaOutWeights] = backPropagation(trainData, h, hdiff, [1 1; 1 1], [1 1 1]')
+[deltaInWeights, deltaOutWeights] = backPropagation(trainData, h, hdiff, [1 1; 1 1], [1 1 1]')
 
-% [numDeltaInWeights, numDeltaOutWeights] = numericalDiffs(trainData, h, [1 1; 1 1], [1 1 1]', 10E-8)
+[numDeltaInWeights, numDeltaOutWeights] = numericalDiffs(trainData, h, [1 1; 1 1], [1 1 1]', 10E-8)
 
 %%
 % III.1.2
 %
-% clear;fprintf('############### III.1.2 ###############\n');
+clear;fprintf('############### III.1.2 ###############\n');
 
-% trainData = importdata('../data/sincTrain25.dt');
-% testData = importdata('../data/sincValidate10.dt');
+trainData = importdata('../data/sincTrain25.dt');
+testData = importdata('../data/sincValidate10.dt');
 
-% h = @(a) a / (1 + abs(a));
-% hdiff = @(a) 1 / (1 + abs(a))^2;
+h = @(a) a / (1 + abs(a));
+hdiff = @(a) 1 / (1 + abs(a))^2;
 
-% randomSeed = rng(43786953);
-% StartInWeights = random('unif', 0, 1, 20, 2);
-% StartOutWeights = random('unif', 0, 1, 21, 1);
+randomSeed = rng(43786953);
+StartInWeights = random('unif', 0, 1, 20, 2);
+StartOutWeights = random('unif', 0, 1, 21, 1);
 
-% smallLearningRate = 0.0001;
-% largeLearningRate = 0.1;
-% goodLearningRate = 0.01;
+smallLearningRate = 0.0001;
+largeLearningRate = 0.1;
+goodLearningRate = 0.01;
 
-% [InWeights1, OutWeights1, TrainError2NodesLargeRate, TestError2NodesLargeRate] = ...
-%     steepestDescent(trainData, testData, StartInWeights(1:2,1:2), ...
-%     StartOutWeights(1:3), h, hdiff, 10E-5, largeLearningRate);
+[InWeights1, OutWeights1, TrainError2NodesLargeRate, TestError2NodesLargeRate] = ...
+    steepestDescent(trainData, testData, StartInWeights(1:2,1:2), ...
+    StartOutWeights(1:3), h, hdiff, 10E-5, largeLearningRate);
 
-% [InWeights2, OutWeights2, TrainError20NodesLargeRate, TestError20NodesLargeRate] = ...
-%     steepestDescent(trainData, testData, StartInWeights, ...
-%     StartOutWeights, h, hdiff, 10E-5, largeLearningRate);
+[InWeights2, OutWeights2, TrainError20NodesLargeRate, TestError20NodesLargeRate] = ...
+    steepestDescent(trainData, testData, StartInWeights, ...
+    StartOutWeights, h, hdiff, 10E-5, largeLearningRate);
 
-% [InWeights3, OutWeights3, TrainError2NodesSmallRate, TestError2NodesSmallRate] = ...
-%     steepestDescent(trainData, testData, StartInWeights(1:2,1:2), ...
-%     StartOutWeights(1:3), h, hdiff, 10E-5, smallLearningRate);
+[InWeights3, OutWeights3, TrainError2NodesSmallRate, TestError2NodesSmallRate] = ...
+    steepestDescent(trainData, testData, StartInWeights(1:2,1:2), ...
+    StartOutWeights(1:3), h, hdiff, 10E-5, smallLearningRate);
 
-% [InWeights4, OutWeights4, TrainError20NodesSmallRate, TestError20NodesSmallRate] = ...
-%     steepestDescent(trainData, testData, StartInWeights, ...
-%     StartOutWeights, h, hdiff, 10E-5, smallLearningRate);
+[InWeights4, OutWeights4, TrainError20NodesSmallRate, TestError20NodesSmallRate] = ...
+    steepestDescent(trainData, testData, StartInWeights, ...
+    StartOutWeights, h, hdiff, 10E-5, smallLearningRate);
 
-% [InWeights5, OutWeights, TrainError20NodesGoodRate, TestError20NodesGoodRate] = ...
-%     steepestDescent( trainData, testData, StartInWeights, ...
-%     StartOutWeights, h, hdiff, 10E-5, goodLearningRate);
+[InWeights5, OutWeights, TrainError20NodesGoodRate, TestError20NodesGoodRate] = ...
+    steepestDescent( trainData, testData, StartInWeights, ...
+    StartOutWeights, h, hdiff, 10E-5, goodLearningRate);
 
-% handle = figure(1);
-% semilogy(TrainError2NodesSmallRate(:,:), 'b-', 'LineWidth', 1.5);
-% hold on;
-% semilogy(TestError2NodesSmallRate(:,:), 'b--', 'LineWidth', 1.5);
-% semilogy(TrainError20NodesSmallRate(:,:), 'r-', 'LineWidth', 1.5);
-% semilogy(TestError20NodesSmallRate(:,:), 'r--', 'LineWidth', 1.5);
-% title('Small learning rate');
-% legend('Training data 2 hidden nodes', 'Test data 2 hidden nodes', ...
-%     'Training data 20 hidden nodes', 'Test data 20 hidden nodes');
-% ylabel('MSE');
-% xlabel('Learning epoch');
-% betterPlots(handle);
-% print(handle, '-depsc2', '../figures/III12_1.eps');
-% hold off;
+handle = figure(1);
+semilogy(TrainError2NodesSmallRate(:,:), 'b-', 'LineWidth', 1.5);
+hold on;
+semilogy(TestError2NodesSmallRate(:,:), 'b--', 'LineWidth', 1.5);
+semilogy(TrainError20NodesSmallRate(:,:), 'r-', 'LineWidth', 1.5);
+semilogy(TestError20NodesSmallRate(:,:), 'r--', 'LineWidth', 1.5);
+title('Small learning rate');
+legend('Training data 2 hidden nodes', 'Test data 2 hidden nodes', ...
+    'Training data 20 hidden nodes', 'Test data 20 hidden nodes');
+ylabel('MSE');
+xlabel('Learning epoch');
+betterPlots(handle);
+print(handle, '-depsc2', '../figures/III12_1.eps');
+hold off;
 
-% handle = figure(2);
-% semilogy(TrainError2NodesLargeRate(:,:), 'b-', 'LineWidth', 1.5);
-% hold on;
-% semilogy(TestError2NodesLargeRate(:,:), 'b--', 'LineWidth', 1.5);
-% semilogy(TrainError20NodesLargeRate(:,:), 'r-', 'LineWidth', 1.5);
-% semilogy(TestError20NodesLargeRate(:,:), 'r--', 'LineWidth', 1.5);
-% title('Large learning rate');
-% legend('Training data 2 hidden nodes', 'Test data 2 hidden nodes', ...
-% 	'Training data 20 hidden nodes', 'Test data 20 hidden nodes');
-% ylabel('MSE');
-% xlabel('Learning epoch');
-% betterPlots(handle);
-% print(handle, '-depsc2', '../figures/III12_2.eps');
-% hold off;
+handle = figure(2);
+semilogy(TrainError2NodesLargeRate(:,:), 'b-', 'LineWidth', 1.5);
+hold on;
+semilogy(TestError2NodesLargeRate(:,:), 'b--', 'LineWidth', 1.5);
+semilogy(TrainError20NodesLargeRate(:,:), 'r-', 'LineWidth', 1.5);
+semilogy(TestError20NodesLargeRate(:,:), 'r--', 'LineWidth', 1.5);
+title('Large learning rate');
+legend('Training data 2 hidden nodes', 'Test data 2 hidden nodes', ...
+	'Training data 20 hidden nodes', 'Test data 20 hidden nodes');
+ylabel('MSE');
+xlabel('Learning epoch');
+betterPlots(handle);
+print(handle, '-depsc2', '../figures/III12_2.eps');
+hold off;
 
-% handle = figure(3);
-% semilogy(TrainError2NodesSmallRate(:,:), 'b-', 'LineWidth', 1.5);
-% hold on;
-% semilogy(TestError2NodesSmallRate(:,:), 'b--', 'LineWidth', 1.5);
-% title('Good learning rate');
-% legend('Training data 20 hidden nodes', 'Test data 20 hidden nodes');
-% ylabel('MSE');
-% xlabel('Learning epoch');
-% betterPlots(handle);
-% print(handle, '-depsc2', '../figures/III12_3.eps');
-% hold off;
+handle = figure(3);
+semilogy(TrainError2NodesSmallRate(:,:), 'b-', 'LineWidth', 1.5);
+hold on;
+semilogy(TestError2NodesSmallRate(:,:), 'b--', 'LineWidth', 1.5);
+title('Good learning rate');
+legend('Training data 20 hidden nodes', 'Test data 20 hidden nodes');
+ylabel('MSE');
+xlabel('Learning epoch');
+betterPlots(handle);
+print(handle, '-depsc2', '../figures/III12_3.eps');
+hold off;
 
-% handle = figure(4);
-% sinc = @(x) sin(x) / x;
+handle = figure(4);
+sinc = @(x) sin(x) / x;
 
-% fplot(sinc, [-10 10], 'b')
-% hold on;
-% fplot(@(x) neuralNetwork(h, x, InWeights1, OutWeights1), [-10 10], 'r');
-% fplot(@(x) neuralNetwork(h, x, InWeights2, OutWeights2), [-10 10], 'g');
-% fplot(@(x) neuralNetwork(h, x, InWeights3, OutWeights3), [-10 10], 'c');
-% fplot(@(x) neuralNetwork(h, x, InWeights4, OutWeights4), [-10 10], 'm');
-% fplot(@(x) neuralNetwork(h, x, InWeights5, OutWeights5), [-10 10], 'k');
-% legend('sinc(x)', '2 hidden nodes, large rate', '20 hidden nodes, large rate', ...
-%     '2 hidden nodes, small rate', '20 hidden nodes, small rate', ...
-%     '20 hidden nodes, good rate');
-% betterPlots(handle);
-% print(handle, '-depsc2', '../figures/III12_4.eps');
-% hold off;
+fplot(sinc, [-10 10], 'b')
+hold on;
+fplot(@(x) neuralNetwork(h, x, InWeights1, OutWeights1), [-10 10], 'r');
+fplot(@(x) neuralNetwork(h, x, InWeights2, OutWeights2), [-10 10], 'g');
+fplot(@(x) neuralNetwork(h, x, InWeights3, OutWeights3), [-10 10], 'c');
+fplot(@(x) neuralNetwork(h, x, InWeights4, OutWeights4), [-10 10], 'm');
+fplot(@(x) neuralNetwork(h, x, InWeights5, OutWeights5), [-10 10], 'k');
+legend('sinc(x)', '2 hidden nodes, large rate', '20 hidden nodes, large rate', ...
+    '2 hidden nodes, small rate', '20 hidden nodes, small rate', ...
+    '20 hidden nodes, good rate');
+betterPlots(handle);
+print(handle, '-depsc2', '../figures/III12_4.eps');
+hold off;
 
 %%
 % III.2.1
