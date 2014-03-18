@@ -28,9 +28,9 @@ randomSeed = rng(43786953);
 StartInWeights = random('unif', 0, 1, 20, 2);
 StartOutWeights = random('unif', 0, 1, 21, 1);
 
-smallLearningRate = 0.0001;
-largeLearningRate = 0.1;
-goodLearningRate = 0.01;
+smallLearningRate = 0.0001
+largeLearningRate = 0.1
+middleLearningRate = 0.01
 
 [InWeights1, OutWeights1, TrainError2NodesLargeRate, TestError2NodesLargeRate] = ...
     steepestDescent(trainData, testData, StartInWeights(1:2,1:2), ...
@@ -48,9 +48,9 @@ goodLearningRate = 0.01;
     steepestDescent(trainData, testData, StartInWeights, ...
     StartOutWeights, h, hdiff, 10E-5, smallLearningRate);
 
-[InWeights5, OutWeights, TrainError20NodesGoodRate, TestError20NodesGoodRate] = ...
+[InWeights5, OutWeights5, TrainError20NodesGoodRate, TestError20NodesGoodRate] = ...
     steepestDescent( trainData, testData, StartInWeights, ...
-    StartOutWeights, h, hdiff, 10E-5, goodLearningRate);
+    StartOutWeights, h, hdiff, 10E-5, middleLearningRate);
 
 handle = figure(1);
 semilogy(TrainError2NodesSmallRate(:,:), 'b-', 'LineWidth', 1.5);
@@ -59,8 +59,8 @@ semilogy(TestError2NodesSmallRate(:,:), 'b--', 'LineWidth', 1.5);
 semilogy(TrainError20NodesSmallRate(:,:), 'r-', 'LineWidth', 1.5);
 semilogy(TestError20NodesSmallRate(:,:), 'r--', 'LineWidth', 1.5);
 title('Small learning rate');
-legend('Training data 2 hidden nodes', 'Test data 2 hidden nodes', ...
-    'Training data 20 hidden nodes', 'Test data 20 hidden nodes');
+legend('Training data, 2 hn', 'Test data, 2 hn', ...
+    'Training data, 20 hn', 'Test data, 20 hn');
 ylabel('MSE');
 xlabel('Learning epoch');
 betterPlots(handle);
@@ -74,8 +74,8 @@ semilogy(TestError2NodesLargeRate(:,:), 'b--', 'LineWidth', 1.5);
 semilogy(TrainError20NodesLargeRate(:,:), 'r-', 'LineWidth', 1.5);
 semilogy(TestError20NodesLargeRate(:,:), 'r--', 'LineWidth', 1.5);
 title('Large learning rate');
-legend('Training data 2 hidden nodes', 'Test data 2 hidden nodes', ...
-	'Training data 20 hidden nodes', 'Test data 20 hidden nodes');
+legend('Training data, 2 hn', 'Test data, 2 hn', ...
+	'Training data, 20 hn', 'Test data, 20 hn');
 ylabel('MSE');
 xlabel('Learning epoch');
 betterPlots(handle);
@@ -86,8 +86,8 @@ handle = figure(3);
 semilogy(TrainError2NodesSmallRate(:,:), 'b-', 'LineWidth', 1.5);
 hold on;
 semilogy(TestError2NodesSmallRate(:,:), 'b--', 'LineWidth', 1.5);
-title('Good learning rate');
-legend('Training data 20 hidden nodes', 'Test data 20 hidden nodes');
+title('Middle learning rate');
+legend('Training data, 20 hn', 'Test data, 20 hn');
 ylabel('MSE');
 xlabel('Learning epoch');
 betterPlots(handle);
@@ -104,9 +104,9 @@ fplot(@(x) neuralNetwork(h, x, InWeights2, OutWeights2), [-10 10], 'g');
 fplot(@(x) neuralNetwork(h, x, InWeights3, OutWeights3), [-10 10], 'c');
 fplot(@(x) neuralNetwork(h, x, InWeights4, OutWeights4), [-10 10], 'm');
 fplot(@(x) neuralNetwork(h, x, InWeights5, OutWeights5), [-10 10], 'k');
-legend('sinc(x)', '2 hidden nodes, large rate', '20 hidden nodes, large rate', ...
-    '2 hidden nodes, small rate', '20 hidden nodes, small rate', ...
-    '20 hidden nodes, good rate');
+legend('sinc(x)', '2 hn, large rate', '20 hn, large rate', ...
+    '2 hn, small rate', '20 hn, small rate', ...
+    '20 hn, middle rate');
 betterPlots(handle);
 print(handle, '-depsc2', '../figures/III12_4.eps');
 hold off;
@@ -138,7 +138,7 @@ normTestVars = var(normTestData(:, 1:end-1), 0, 1)'
 fprintf('############### III.2.2 ###############\n');
 
 % addpath to the libsvm toolbox
-addpath('../lib/libsvm');
+addpath('lib/libsvm');
 
 n = 3;
 i = 10.^[-n:n]' * ones(1,2*n+1);
